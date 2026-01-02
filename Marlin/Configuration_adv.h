@@ -21,6 +21,10 @@
  */
 #pragma once
 
+
+#define USB_CS_PIN PA4
+#define USB_INTR_PIN -1
+
 /**
  * Configuration_adv.h
  *
@@ -272,6 +276,8 @@
     #define COOLER_FAN_FACTOR     25  // PWM increase per °C above target
   #endif
 #endif
+
+
 
 //
 // Motherboard Sensor options
@@ -856,6 +862,9 @@
 
 // @section multi stepper
 
+#define NO_MOTION_BEFORE_HOMING
+#define PREVENT_CROSSING_PERIMETERS
+
 /**
  * Multi-Stepper / Multi-Endstop
  *
@@ -1312,6 +1321,10 @@
 //#define DISABLE_IDLE_W
 #define DISABLE_IDLE_E    // Shut down all idle extruders
 
+#define DEFAULT_STEPPER_TIMEOUT_SEC 120
+
+
+
 // Default Minimum Feedrates for printing and travel moves
 #define DEFAULT_MINIMUMFEEDRATE       0.0     // (mm/s) Minimum feedrate. Set with M205 S.
 #define DEFAULT_MINTRAVELFEEDRATE     0.0     // (mm/s) Minimum travel feedrate. Set with M205 T.
@@ -1525,6 +1538,7 @@
 //===========================================================================
 
 // @section lcd
+
 
 // Turn off the display blinking that warns about possible accuracy reduction
 //#define DISABLE_REDUCED_ACCURACY_WARNING
@@ -1832,9 +1846,9 @@
    * an option on the LCD screen to continue the print from the last-known
    * point in the file.
    */
-  //#define POWER_LOSS_RECOVERY
+  #define POWER_LOSS_RECOVERY
   #if ENABLED(POWER_LOSS_RECOVERY)
-    #define PLR_ENABLED_DEFAULT       false // Power-Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
+    #define PLR_ENABLED_DEFAULT        // Power-Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
     //#define PLR_HEAT_BED_ON_REBOOT        // Heat up bed immediately on reboot to mitigate object detaching/warping.
     //#define PLR_HEAT_BED_EXTRA          0 // (°C) Relative increase of bed temperature for better adhesion (limited by max temp).
     //#define PLR_BED_THRESHOLD BED_MAXTEMP // (°C) Skip user confirmation at or above this bed temperature (0 to disable)
@@ -1948,6 +1962,8 @@
    * [1] On AVR an interrupt-capable pin is best for UHS3 compatibility.
    */
   //#define USB_FLASH_DRIVE_SUPPORT
+
+
   #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
     /**
      * USB Host Shield Library
@@ -1969,10 +1985,19 @@
      */
     //#define USE_OTG_USB_HOST
 
-    #if DISABLED(USE_OTG_USB_HOST)
-      #define USB_CS_PIN    SD_SS_PIN
-      #define USB_INTR_PIN  SD_DETECT_PIN
-    #endif
+    //#if DISABLED(USE_OTG_USB_HOST)
+    //  #define USB_CS_PIN    SD_SS_PIN
+    //  #define USB_INTR_PIN  SD_DETECT_PIN
+    //#endif
+
+    //incluido para simular pinos para o compilador funcionar, recomendacao MKS
+    ///#if DISABLED(USE_OTG_USB_HOST)
+      // pino dummy seguro  
+      #define USB_CS_PIN PA4
+      // sem interrupção
+      #define USB_INTR_PIN -1
+    //#endif
+
   #endif
 
   /**
@@ -2020,6 +2045,7 @@
    * :[ 'LCD', 'ONBOARD', 'CUSTOM_CABLE' ]
    */
   //#define SDCARD_CONNECTION LCD
+  #define SDCARD_CONNECTION ONBOARD
 
   // Enable if SD detect is rendered useless (e.g., by using an SD extender)
   //#define NO_SD_DETECT
@@ -2367,7 +2393,7 @@
  *
  * Warning: Does not respect endstops!
  */
-//#define BABYSTEPPING
+#define BABYSTEPPING
 #if ENABLED(BABYSTEPPING)
   //#define EP_BABYSTEPPING                 // M293/M294 babystepping with EMERGENCY_PARSER support
   //#define BABYSTEP_WITHOUT_HOMING
@@ -2378,7 +2404,7 @@
   #define BABYSTEP_MULTIPLICATOR_Z  1       // (steps or mm) Steps or millimeter distance for each Z babystep
   #define BABYSTEP_MULTIPLICATOR_XY 1       // (steps or mm) Steps or millimeter distance for each XY babystep
 
-  //#define DOUBLECLICK_FOR_Z_BABYSTEPPING  // Double-click on the Status Screen for Z Babystepping.
+  #define DOUBLECLICK_FOR_Z_BABYSTEPPING  // Double-click on the Status Screen for Z Babystepping.
   #if ENABLED(DOUBLECLICK_FOR_Z_BABYSTEPPING)
     #define DOUBLECLICK_MAX_INTERVAL 1250   // (ms) Maximum interval between clicks.
                                             // Note: Extra time may be added to mitigate controller latency.
@@ -2390,7 +2416,7 @@
 
   //#define BABYSTEP_DISPLAY_TOTAL          // Display total babysteps since last G28
 
-  //#define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
+  #define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
     //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
     //#define BABYSTEP_GFX_OVERLAY          // Enable graphical overlay on Z-offset editor
@@ -4508,9 +4534,10 @@
 /**
  * Native ESP32 board with WiFi or add-on ESP32 WiFi-101 module
  */
-//#define WIFISUPPORT         // Marlin embedded WiFi management. Not needed for simple WiFi serial port.
+#define WIFISUPPORT         // Marlin embedded WiFi management. Not needed for simple WiFi serial port.
 //#define ESP3D_WIFISUPPORT   // ESP3D Library WiFi management (https://github.com/luc-github/ESP3DLib)
 
+#define WIFI_MODE 1
 /**
  * Extras for an ESP32-based motherboard with WIFISUPPORT
  * These options don't apply to add-on WiFi modules based on ESP32 WiFi101.
@@ -4529,6 +4556,9 @@
    *   #define WIFI_PWD  "WiFi Password"
    */
   //#include "Configuration_Secure.h" // External file with WiFi SSID / Password
+  #define WIFI_SSID "Panfle"
+  #define WIFI_PWD  "Rol@nd1@92qpzm#"
+
 #endif
 
 // @section multi-material
