@@ -24,6 +24,8 @@
 #define USB_CS_PIN PA4
 #define USB_INTR_PIN -1
 
+////teste
+
 /**
  * Configuration.h
  *
